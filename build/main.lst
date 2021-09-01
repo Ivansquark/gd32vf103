@@ -1,0 +1,210 @@
+
+build/main.o:     file format elf32-littleriscv
+
+
+Disassembly of section .text.main:
+
+00000000 <main>:
+#include "uart0.h"
+
+void gpioInit();
+void delay(volatile uint32_t val);
+
+int main() {
+   0:	1101                	addi	sp,sp,-32
+   2:	ce06                	sw	ra,28(sp)
+   4:	cc22                	sw	s0,24(sp)
+   6:	1000                	addi	s0,sp,32
+    gpioInit();   
+   8:	00000097          	auipc	ra,0x0
+			8: R_RISCV_CALL	_Z8gpioInitv
+			8: R_RISCV_RELAX	*ABS*
+   c:	000080e7          	jalr	ra # 8 <main+0x8>
+    GPIOC->BSRR |= (1<<29);
+  10:	400117b7          	lui	a5,0x40011
+  14:	4b94                	lw	a3,16(a5)
+  16:	400117b7          	lui	a5,0x40011
+  1a:	20000737          	lui	a4,0x20000
+  1e:	8f55                	or	a4,a4,a3
+  20:	cb98                	sw	a4,16(a5)
+    GPIOC->BSRR |= (1<<13);
+  22:	400117b7          	lui	a5,0x40011
+  26:	4b94                	lw	a3,16(a5)
+  28:	400117b7          	lui	a5,0x40011
+  2c:	6709                	lui	a4,0x2
+  2e:	8f55                	or	a4,a4,a3
+  30:	cb98                	sw	a4,16(a5)
+    Uart0 uart;
+  32:	fec40793          	addi	a5,s0,-20
+  36:	853e                	mv	a0,a5
+  38:	00000097          	auipc	ra,0x0
+			38: R_RISCV_CALL	_ZN5Uart0C1Ev
+			38: R_RISCV_RELAX	*ABS*
+  3c:	000080e7          	jalr	ra # 38 <main+0x38>
+    uint8_t count = 0;
+  40:	fe0407a3          	sb	zero,-17(s0)
+
+00000044 <.L2>:
+    while (1) {
+        uart.sendByte(count++);        
+  44:	fef44783          	lbu	a5,-17(s0)
+  48:	00178713          	addi	a4,a5,1 # 40011001 <.LASF36+0x40010d80>
+  4c:	fee407a3          	sb	a4,-17(s0)
+  50:	fec40713          	addi	a4,s0,-20
+  54:	85be                	mv	a1,a5
+  56:	853a                	mv	a0,a4
+  58:	00000097          	auipc	ra,0x0
+			58: R_RISCV_CALL	_ZN5Uart08sendByteEh
+			58: R_RISCV_RELAX	*ABS*
+  5c:	000080e7          	jalr	ra # 58 <.L2+0x14>
+        //GPIOC->BSRR |= (1<<29);
+        //delay(500000);
+        //GPIOC->BSRR |= (1<<13);
+        //delay(1000000);
+         GPIOC->ODR |= (1<<13);
+  60:	400117b7          	lui	a5,0x40011
+  64:	47d4                	lw	a3,12(a5)
+  66:	400117b7          	lui	a5,0x40011
+  6a:	6709                	lui	a4,0x2
+  6c:	8f55                	or	a4,a4,a3
+  6e:	c7d8                	sw	a4,12(a5)
+         delay(500000);
+  70:	0007a7b7          	lui	a5,0x7a
+  74:	12078513          	addi	a0,a5,288 # 7a120 <.LASF36+0x79e9f>
+  78:	00000097          	auipc	ra,0x0
+			78: R_RISCV_CALL	_Z5delaym
+			78: R_RISCV_RELAX	*ABS*
+  7c:	000080e7          	jalr	ra # 78 <.L2+0x34>
+         GPIOC->ODR &=~ (1<<13);
+  80:	400117b7          	lui	a5,0x40011
+  84:	47d4                	lw	a3,12(a5)
+  86:	400117b7          	lui	a5,0x40011
+  8a:	7779                	lui	a4,0xffffe
+  8c:	177d                	addi	a4,a4,-1
+  8e:	8f75                	and	a4,a4,a3
+  90:	c7d8                	sw	a4,12(a5)
+         delay(500000);
+  92:	0007a7b7          	lui	a5,0x7a
+  96:	12078513          	addi	a0,a5,288 # 7a120 <.LASF36+0x79e9f>
+  9a:	00000097          	auipc	ra,0x0
+			9a: R_RISCV_CALL	_Z5delaym
+			9a: R_RISCV_RELAX	*ABS*
+  9e:	000080e7          	jalr	ra # 9a <.L2+0x56>
+        uart.sendByte(count++);        
+  a2:	b74d                	j	44 <.L2>
+			a2: R_RISCV_RVC_JUMP	.L2
+
+Disassembly of section .text._Z8gpioInitv:
+
+00000000 <_Z8gpioInitv>:
+    }
+    return 0;
+}
+
+void gpioInit() {
+   0:	1141                	addi	sp,sp,-16
+   2:	c622                	sw	s0,12(sp)
+   4:	0800                	addi	s0,sp,16
+    RCC->APB2ENR |= RCC_APB2ENR_IOPCEN;
+   6:	400217b7          	lui	a5,0x40021
+   a:	4f98                	lw	a4,24(a5)
+   c:	400217b7          	lui	a5,0x40021
+  10:	01076713          	ori	a4,a4,16
+  14:	cf98                	sw	a4,24(a5)
+    GPIOC->CRH &=~ GPIO_CRH_CNF13;
+  16:	400117b7          	lui	a5,0x40011
+  1a:	43d4                	lw	a3,4(a5)
+  1c:	400117b7          	lui	a5,0x40011
+  20:	ff400737          	lui	a4,0xff400
+  24:	177d                	addi	a4,a4,-1
+  26:	8f75                	and	a4,a4,a3
+  28:	c3d8                	sw	a4,4(a5)
+    GPIOC->CRH |= GPIO_CRH_MODE13; //00:11 GPIO output max speed
+  2a:	400117b7          	lui	a5,0x40011
+  2e:	43d4                	lw	a3,4(a5)
+  30:	400117b7          	lui	a5,0x40011
+  34:	00300737          	lui	a4,0x300
+  38:	8f55                	or	a4,a4,a3
+  3a:	c3d8                	sw	a4,4(a5)
+}
+  3c:	0001                	nop
+  3e:	4432                	lw	s0,12(sp)
+  40:	0141                	addi	sp,sp,16
+  42:	8082                	ret
+
+Disassembly of section .text._Z5delaym:
+
+00000000 <_Z5delaym>:
+
+void delay(volatile uint32_t val) {
+   0:	1101                	addi	sp,sp,-32
+   2:	ce22                	sw	s0,28(sp)
+   4:	1000                	addi	s0,sp,32
+   6:	fea42623          	sw	a0,-20(s0)
+
+0000000a <.L6>:
+    while(val!=0) {
+   a:	fec42783          	lw	a5,-20(s0)
+   e:	00f037b3          	snez	a5,a5
+  12:	0ff7f793          	andi	a5,a5,255
+  16:	c799                	beqz	a5,24 <.L7>
+			16: R_RISCV_RVC_BRANCH	.L7
+        val--;
+  18:	fec42783          	lw	a5,-20(s0)
+  1c:	17fd                	addi	a5,a5,-1
+  1e:	fef42623          	sw	a5,-20(s0)
+    while(val!=0) {
+  22:	b7e5                	j	a <.L6>
+			22: R_RISCV_RVC_JUMP	.L6
+
+00000024 <.L7>:
+    }
+}
+  24:	0001                	nop
+  26:	4472                	lw	s0,28(sp)
+  28:	6105                	addi	sp,sp,32
+  2a:	8082                	ret
+
+Disassembly of section .text._Z19USART0_IRQn_handlerv:
+
+00000000 <_Z19USART0_IRQn_handlerv>:
+
+void USART0_IRQn_handler() {
+   0:	1141                	addi	sp,sp,-16
+   2:	c606                	sw	ra,12(sp)
+   4:	c422                	sw	s0,8(sp)
+   6:	0800                	addi	s0,sp,16
+    GPIOC->ODR |= (1 << 13);
+   8:	400117b7          	lui	a5,0x40011
+   c:	47d4                	lw	a3,12(a5)
+   e:	400117b7          	lui	a5,0x40011
+  12:	6709                	lui	a4,0x2
+  14:	8f55                	or	a4,a4,a3
+  16:	c7d8                	sw	a4,12(a5)
+    delay(100000);
+  18:	67e1                	lui	a5,0x18
+  1a:	6a078513          	addi	a0,a5,1696 # 186a0 <.LASF36+0x1841f>
+  1e:	00000097          	auipc	ra,0x0
+			1e: R_RISCV_CALL	_Z5delaym
+			1e: R_RISCV_RELAX	*ABS*
+  22:	000080e7          	jalr	ra # 1e <_Z19USART0_IRQn_handlerv+0x1e>
+    GPIOC->ODR &= ~(1 << 13);
+  26:	400117b7          	lui	a5,0x40011
+  2a:	47d4                	lw	a3,12(a5)
+  2c:	400117b7          	lui	a5,0x40011
+  30:	7779                	lui	a4,0xffffe
+  32:	177d                	addi	a4,a4,-1
+  34:	8f75                	and	a4,a4,a3
+  36:	c7d8                	sw	a4,12(a5)
+    delay(100000);
+  38:	67e1                	lui	a5,0x18
+  3a:	6a078513          	addi	a0,a5,1696 # 186a0 <.LASF36+0x1841f>
+  3e:	00000097          	auipc	ra,0x0
+			3e: R_RISCV_CALL	_Z5delaym
+			3e: R_RISCV_RELAX	*ABS*
+  42:	000080e7          	jalr	ra # 3e <_Z19USART0_IRQn_handlerv+0x3e>
+  46:	0001                	nop
+  48:	40b2                	lw	ra,12(sp)
+  4a:	4422                	lw	s0,8(sp)
+  4c:	0141                	addi	sp,sp,16
+  4e:	8082                	ret

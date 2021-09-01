@@ -1,0 +1,507 @@
+
+build/prog.elf:     file format elf32-littleriscv
+
+
+Disassembly of section .text:
+
+0800015c <_Z5_initv>:
+extern void (*__fini_array_start []) (void) __attribute__((weak)); //from linker destructors
+extern void (*__fini_array_end []) (void) __attribute__((weak)); //from linker	destructors
+// dummy This section holds executable instructions that contribute to the process initialization code. When a program
+// starts to run, the system arranges to execute the code in this section before calling the main program entry point
+// (called main for C programs).
+void __attribute__ ((weak)) _init(void)  {}
+ 800015c:	1141                	addi	sp,sp,-16
+ 800015e:	c622                	sw	s0,12(sp)
+ 8000160:	0800                	addi	s0,sp,16
+ 8000162:	0001                	nop
+ 8000164:	4432                	lw	s0,12(sp)
+ 8000166:	0141                	addi	sp,sp,16
+ 8000168:	8082                	ret
+
+0800016a <_Z5_finiv>:
+// dummy This section holds executable instructions that contribute to the process termination code. That is,
+// when a program exits normally, the system arranges to execute the code in this section
+void __attribute__ ((weak)) _fini(void)  {} 
+ 800016a:	1141                	addi	sp,sp,-16
+ 800016c:	c622                	sw	s0,12(sp)
+ 800016e:	0800                	addi	s0,sp,16
+ 8000170:	0001                	nop
+ 8000172:	4432                	lw	s0,12(sp)
+ 8000174:	0141                	addi	sp,sp,16
+ 8000176:	8082                	ret
+
+08000178 <_Z17__libc_init_arrayv>:
+
+/* Iterate over all the init routines.  */
+// static initialization constructors function
+void __libc_init_array(void) {
+ 8000178:	1101                	addi	sp,sp,-32
+ 800017a:	ce06                	sw	ra,28(sp)
+ 800017c:	cc22                	sw	s0,24(sp)
+ 800017e:	1000                	addi	s0,sp,32
+    int count;
+    int i;
+    count = __preinit_array_end - __preinit_array_start; // counts of preinit functions DK what it is
+ 8000180:	080007b7          	lui	a5,0x8000
+ 8000184:	73c78713          	addi	a4,a5,1852 # 800073c <__fini_array_end>
+ 8000188:	080007b7          	lui	a5,0x8000
+ 800018c:	73c78793          	addi	a5,a5,1852 # 800073c <__fini_array_end>
+ 8000190:	40f707b3          	sub	a5,a4,a5
+ 8000194:	8789                	srai	a5,a5,0x2
+ 8000196:	fef42423          	sw	a5,-24(s0)
+    for (i = 0; i < count; i++)
+ 800019a:	fe042623          	sw	zero,-20(s0)
+ 800019e:	fec42703          	lw	a4,-20(s0)
+ 80001a2:	fe842783          	lw	a5,-24(s0)
+ 80001a6:	02f75263          	bge	a4,a5,80001ca <_Z17__libc_init_arrayv+0x52>
+        __preinit_array_start[i]();
+ 80001aa:	080007b7          	lui	a5,0x8000
+ 80001ae:	73c78713          	addi	a4,a5,1852 # 800073c <__fini_array_end>
+ 80001b2:	fec42783          	lw	a5,-20(s0)
+ 80001b6:	078a                	slli	a5,a5,0x2
+ 80001b8:	97ba                	add	a5,a5,a4
+ 80001ba:	439c                	lw	a5,0(a5)
+ 80001bc:	9782                	jalr	a5
+    for (i = 0; i < count; i++)
+ 80001be:	fec42783          	lw	a5,-20(s0)
+ 80001c2:	0785                	addi	a5,a5,1
+ 80001c4:	fef42623          	sw	a5,-20(s0)
+ 80001c8:	bfd9                	j	800019e <_Z17__libc_init_arrayv+0x26>
+    _init();
+ 80001ca:	3f49                	jal	800015c <_Z5_initv>
+    count = __init_array_end - __init_array_start; // counts of init constructors
+ 80001cc:	080007b7          	lui	a5,0x8000
+ 80001d0:	73c78713          	addi	a4,a5,1852 # 800073c <__fini_array_end>
+ 80001d4:	080007b7          	lui	a5,0x8000
+ 80001d8:	73c78793          	addi	a5,a5,1852 # 800073c <__fini_array_end>
+ 80001dc:	40f707b3          	sub	a5,a4,a5
+ 80001e0:	8789                	srai	a5,a5,0x2
+ 80001e2:	fef42423          	sw	a5,-24(s0)
+    for (i = 0; i < count; i++)
+ 80001e6:	fe042623          	sw	zero,-20(s0)
+ 80001ea:	fec42703          	lw	a4,-20(s0)
+ 80001ee:	fe842783          	lw	a5,-24(s0)
+ 80001f2:	02f75263          	bge	a4,a5,8000216 <_Z17__libc_init_arrayv+0x9e>
+        __init_array_start[i]();
+ 80001f6:	080007b7          	lui	a5,0x8000
+ 80001fa:	73c78713          	addi	a4,a5,1852 # 800073c <__fini_array_end>
+ 80001fe:	fec42783          	lw	a5,-20(s0)
+ 8000202:	078a                	slli	a5,a5,0x2
+ 8000204:	97ba                	add	a5,a5,a4
+ 8000206:	439c                	lw	a5,0(a5)
+ 8000208:	9782                	jalr	a5
+    for (i = 0; i < count; i++)
+ 800020a:	fec42783          	lw	a5,-20(s0)
+ 800020e:	0785                	addi	a5,a5,1
+ 8000210:	fef42623          	sw	a5,-20(s0)
+ 8000214:	bfd9                	j	80001ea <_Z17__libc_init_arrayv+0x72>
+}
+ 8000216:	0001                	nop
+ 8000218:	40f2                	lw	ra,28(sp)
+ 800021a:	4462                	lw	s0,24(sp)
+ 800021c:	6105                	addi	sp,sp,32
+ 800021e:	8082                	ret
+
+08000220 <_Z17__libc_fini_arrayv>:
+/* Run all the cleanup routines.  */
+//!< destructors not usefull in microcontrollers
+void __libc_fini_array(void) {
+ 8000220:	1101                	addi	sp,sp,-32
+ 8000222:	ce06                	sw	ra,28(sp)
+ 8000224:	cc22                	sw	s0,24(sp)
+ 8000226:	1000                	addi	s0,sp,32
+    int count;
+    int i;
+    count = __fini_array_end - __fini_array_start;
+ 8000228:	080007b7          	lui	a5,0x8000
+ 800022c:	73c78713          	addi	a4,a5,1852 # 800073c <__fini_array_end>
+ 8000230:	080007b7          	lui	a5,0x8000
+ 8000234:	73c78793          	addi	a5,a5,1852 # 800073c <__fini_array_end>
+ 8000238:	40f707b3          	sub	a5,a4,a5
+ 800023c:	8789                	srai	a5,a5,0x2
+ 800023e:	fef42423          	sw	a5,-24(s0)
+    for (i = count; i > 0; i--)
+ 8000242:	fe842783          	lw	a5,-24(s0)
+ 8000246:	fef42623          	sw	a5,-20(s0)
+ 800024a:	fec42783          	lw	a5,-20(s0)
+ 800024e:	02f05363          	blez	a5,8000274 <_Z17__libc_fini_arrayv+0x54>
+        __fini_array_start[i - 1]();
+ 8000252:	fec42783          	lw	a5,-20(s0)
+ 8000256:	17fd                	addi	a5,a5,-1
+ 8000258:	08000737          	lui	a4,0x8000
+ 800025c:	73c70713          	addi	a4,a4,1852 # 800073c <__fini_array_end>
+ 8000260:	078a                	slli	a5,a5,0x2
+ 8000262:	97ba                	add	a5,a5,a4
+ 8000264:	439c                	lw	a5,0(a5)
+ 8000266:	9782                	jalr	a5
+    for (i = count; i > 0; i--)
+ 8000268:	fec42783          	lw	a5,-20(s0)
+ 800026c:	17fd                	addi	a5,a5,-1
+ 800026e:	fef42623          	sw	a5,-20(s0)
+ 8000272:	bfe1                	j	800024a <_Z17__libc_fini_arrayv+0x2a>
+    _fini();
+ 8000274:	3ddd                	jal	800016a <_Z5_finiv>
+}
+ 8000276:	0001                	nop
+ 8000278:	40f2                	lw	ra,28(sp)
+ 800027a:	4462                	lw	s0,24(sp)
+ 800027c:	6105                	addi	sp,sp,32
+ 800027e:	8082                	ret
+
+08000280 <_Z15Default_Handlerv>:
+
+void Default_Handler() {
+ 8000280:	1141                	addi	sp,sp,-16
+ 8000282:	c622                	sw	s0,12(sp)
+ 8000284:	0800                	addi	s0,sp,16
+    while(1);
+ 8000286:	a001                	j	8000286 <_Z15Default_Handlerv+0x6>
+
+08000288 <_Z13Reset_Handlerv>:
+extern void *_sidata, *_sdata, *_edata, *_sbss, *_ebss; //из линкер скрипта
+void __attribute__((naked,noreturn)) Reset_Handler() {
+    // jump to 0x0800xxxx address field from 0x0000xxxx address field
+    asm("la a0, 0x08000000 \n"
+         "addi a0, a0, 0x292 \n"
+         "jr a0");
+ 8000288:	08000537          	lui	a0,0x8000
+ 800028c:	29250513          	addi	a0,a0,658 # 8000292 <_Z13Reset_Handlerv+0xa>
+ 8000290:	8502                	jr	a0
+    // check if PC == 0x0800xxxx     
+    asm("la s0, _estack \n" 
+        "la s1, 0x20000800 \n"
+        "bne s0, s1, _Z13Reset_Handlerv");
+ 8000292:	18000417          	auipc	s0,0x18000
+ 8000296:	56e40413          	addi	s0,s0,1390 # 20000800 <_StackLimit>
+ 800029a:	200014b7          	lui	s1,0x20001
+ 800029e:	80048493          	addi	s1,s1,-2048 # 20000800 <_StackLimit>
+ 80002a2:	fe9413e3          	bne	s0,s1,8000288 <_Z13Reset_Handlerv>
+    asm("mv sp, s1"); // set stack ptr
+ 80002a6:	8126                	mv	sp,s1
+    asm("csrc 0x300, 8"); // disable interrupts
+ 80002a8:	30047073          	csrci	mstatus,8
+    main();
+ 80002ac:	2011                	jal	80002b0 <main>
+}
+ 80002ae:	0001                	nop
+
+080002b0 <main>:
+#include "uart0.h"
+
+void gpioInit();
+void delay(volatile uint32_t val);
+
+int main() {
+ 80002b0:	1101                	addi	sp,sp,-32
+ 80002b2:	ce06                	sw	ra,28(sp)
+ 80002b4:	cc22                	sw	s0,24(sp)
+ 80002b6:	1000                	addi	s0,sp,32
+    gpioInit();   
+ 80002b8:	28bd                	jal	8000336 <_Z8gpioInitv>
+    GPIOC->BSRR |= (1<<29);
+ 80002ba:	400117b7          	lui	a5,0x40011
+ 80002be:	4b94                	lw	a3,16(a5)
+ 80002c0:	400117b7          	lui	a5,0x40011
+ 80002c4:	20000737          	lui	a4,0x20000
+ 80002c8:	8f55                	or	a4,a4,a3
+ 80002ca:	cb98                	sw	a4,16(a5)
+    GPIOC->BSRR |= (1<<13);
+ 80002cc:	400117b7          	lui	a5,0x40011
+ 80002d0:	4b94                	lw	a3,16(a5)
+ 80002d2:	400117b7          	lui	a5,0x40011
+ 80002d6:	6709                	lui	a4,0x2
+ 80002d8:	8f55                	or	a4,a4,a3
+ 80002da:	cb98                	sw	a4,16(a5)
+    Uart0 uart;
+ 80002dc:	fec40793          	addi	a5,s0,-20
+ 80002e0:	853e                	mv	a0,a5
+ 80002e2:	2221                	jal	80003ea <_ZN5Uart0C1Ev>
+    uint8_t count = 0;
+ 80002e4:	fe0407a3          	sb	zero,-17(s0)
+    while (1) {
+        uart.sendByte(count++);        
+ 80002e8:	fef44783          	lbu	a5,-17(s0)
+ 80002ec:	00178713          	addi	a4,a5,1 # 40011001 <_StackLimit+0x20010801>
+ 80002f0:	fee407a3          	sb	a4,-17(s0)
+ 80002f4:	fec40713          	addi	a4,s0,-20
+ 80002f8:	85be                	mv	a1,a5
+ 80002fa:	853a                	mv	a0,a4
+ 80002fc:	2229                	jal	8000406 <_ZN5Uart08sendByteEh>
+        //GPIOC->BSRR |= (1<<29);
+        //delay(500000);
+        //GPIOC->BSRR |= (1<<13);
+        //delay(1000000);
+         GPIOC->ODR |= (1<<13);
+ 80002fe:	400117b7          	lui	a5,0x40011
+ 8000302:	47d4                	lw	a3,12(a5)
+ 8000304:	400117b7          	lui	a5,0x40011
+ 8000308:	6709                	lui	a4,0x2
+ 800030a:	8f55                	or	a4,a4,a3
+ 800030c:	c7d8                	sw	a4,12(a5)
+         delay(500000);
+ 800030e:	0007a7b7          	lui	a5,0x7a
+ 8000312:	12078513          	addi	a0,a5,288 # 7a120 <__stack_size+0x79920>
+ 8000316:	2095                	jal	800037a <_Z5delaym>
+         GPIOC->ODR &=~ (1<<13);
+ 8000318:	400117b7          	lui	a5,0x40011
+ 800031c:	47d4                	lw	a3,12(a5)
+ 800031e:	400117b7          	lui	a5,0x40011
+ 8000322:	7779                	lui	a4,0xffffe
+ 8000324:	177d                	addi	a4,a4,-1
+ 8000326:	8f75                	and	a4,a4,a3
+ 8000328:	c7d8                	sw	a4,12(a5)
+         delay(500000);
+ 800032a:	0007a7b7          	lui	a5,0x7a
+ 800032e:	12078513          	addi	a0,a5,288 # 7a120 <__stack_size+0x79920>
+ 8000332:	20a1                	jal	800037a <_Z5delaym>
+        uart.sendByte(count++);        
+ 8000334:	bf55                	j	80002e8 <main+0x38>
+
+08000336 <_Z8gpioInitv>:
+    }
+    return 0;
+}
+
+void gpioInit() {
+ 8000336:	1141                	addi	sp,sp,-16
+ 8000338:	c622                	sw	s0,12(sp)
+ 800033a:	0800                	addi	s0,sp,16
+    RCC->APB2ENR |= RCC_APB2ENR_IOPCEN;
+ 800033c:	400217b7          	lui	a5,0x40021
+ 8000340:	4f98                	lw	a4,24(a5)
+ 8000342:	400217b7          	lui	a5,0x40021
+ 8000346:	01076713          	ori	a4,a4,16
+ 800034a:	cf98                	sw	a4,24(a5)
+    GPIOC->CRH &=~ GPIO_CRH_CNF13;
+ 800034c:	400117b7          	lui	a5,0x40011
+ 8000350:	43d4                	lw	a3,4(a5)
+ 8000352:	400117b7          	lui	a5,0x40011
+ 8000356:	ff400737          	lui	a4,0xff400
+ 800035a:	177d                	addi	a4,a4,-1
+ 800035c:	8f75                	and	a4,a4,a3
+ 800035e:	c3d8                	sw	a4,4(a5)
+    GPIOC->CRH |= GPIO_CRH_MODE13; //00:11 GPIO output max speed
+ 8000360:	400117b7          	lui	a5,0x40011
+ 8000364:	43d4                	lw	a3,4(a5)
+ 8000366:	400117b7          	lui	a5,0x40011
+ 800036a:	00300737          	lui	a4,0x300
+ 800036e:	8f55                	or	a4,a4,a3
+ 8000370:	c3d8                	sw	a4,4(a5)
+}
+ 8000372:	0001                	nop
+ 8000374:	4432                	lw	s0,12(sp)
+ 8000376:	0141                	addi	sp,sp,16
+ 8000378:	8082                	ret
+
+0800037a <_Z5delaym>:
+
+void delay(volatile uint32_t val) {
+ 800037a:	1101                	addi	sp,sp,-32
+ 800037c:	ce22                	sw	s0,28(sp)
+ 800037e:	1000                	addi	s0,sp,32
+ 8000380:	fea42623          	sw	a0,-20(s0)
+    while(val!=0) {
+ 8000384:	fec42783          	lw	a5,-20(s0)
+ 8000388:	00f037b3          	snez	a5,a5
+ 800038c:	0ff7f793          	andi	a5,a5,255
+ 8000390:	c799                	beqz	a5,800039e <_Z5delaym+0x24>
+        val--;
+ 8000392:	fec42783          	lw	a5,-20(s0)
+ 8000396:	17fd                	addi	a5,a5,-1
+ 8000398:	fef42623          	sw	a5,-20(s0)
+    while(val!=0) {
+ 800039c:	b7e5                	j	8000384 <_Z5delaym+0xa>
+    }
+}
+ 800039e:	0001                	nop
+ 80003a0:	4472                	lw	s0,28(sp)
+ 80003a2:	6105                	addi	sp,sp,32
+ 80003a4:	8082                	ret
+
+080003a6 <_Z19USART0_IRQn_handlerv>:
+
+void USART0_IRQn_handler() {
+ 80003a6:	1141                	addi	sp,sp,-16
+ 80003a8:	c606                	sw	ra,12(sp)
+ 80003aa:	c422                	sw	s0,8(sp)
+ 80003ac:	0800                	addi	s0,sp,16
+    GPIOC->ODR |= (1 << 13);
+ 80003ae:	400117b7          	lui	a5,0x40011
+ 80003b2:	47d4                	lw	a3,12(a5)
+ 80003b4:	400117b7          	lui	a5,0x40011
+ 80003b8:	6709                	lui	a4,0x2
+ 80003ba:	8f55                	or	a4,a4,a3
+ 80003bc:	c7d8                	sw	a4,12(a5)
+    delay(100000);
+ 80003be:	67e1                	lui	a5,0x18
+ 80003c0:	6a078513          	addi	a0,a5,1696 # 186a0 <__stack_size+0x17ea0>
+ 80003c4:	3f5d                	jal	800037a <_Z5delaym>
+    GPIOC->ODR &= ~(1 << 13);
+ 80003c6:	400117b7          	lui	a5,0x40011
+ 80003ca:	47d4                	lw	a3,12(a5)
+ 80003cc:	400117b7          	lui	a5,0x40011
+ 80003d0:	7779                	lui	a4,0xffffe
+ 80003d2:	177d                	addi	a4,a4,-1
+ 80003d4:	8f75                	and	a4,a4,a3
+ 80003d6:	c7d8                	sw	a4,12(a5)
+    delay(100000);
+ 80003d8:	67e1                	lui	a5,0x18
+ 80003da:	6a078513          	addi	a0,a5,1696 # 186a0 <__stack_size+0x17ea0>
+ 80003de:	3f71                	jal	800037a <_Z5delaym>
+ 80003e0:	0001                	nop
+ 80003e2:	40b2                	lw	ra,12(sp)
+ 80003e4:	4422                	lw	s0,8(sp)
+ 80003e6:	0141                	addi	sp,sp,16
+ 80003e8:	8082                	ret
+
+080003ea <_ZN5Uart0C1Ev>:
+#include "uart0.h"
+
+Uart0::Uart0() {
+ 80003ea:	1101                	addi	sp,sp,-32
+ 80003ec:	ce06                	sw	ra,28(sp)
+ 80003ee:	cc22                	sw	s0,24(sp)
+ 80003f0:	1000                	addi	s0,sp,32
+ 80003f2:	fea42623          	sw	a0,-20(s0)
+    init();
+ 80003f6:	fec42503          	lw	a0,-20(s0)
+ 80003fa:	205d                	jal	80004a0 <_ZN5Uart04initEv>
+}
+ 80003fc:	0001                	nop
+ 80003fe:	40f2                	lw	ra,28(sp)
+ 8000400:	4462                	lw	s0,24(sp)
+ 8000402:	6105                	addi	sp,sp,32
+ 8000404:	8082                	ret
+
+08000406 <_ZN5Uart08sendByteEh>:
+
+void Uart0::sendByte(uint8_t byte) {
+ 8000406:	1101                	addi	sp,sp,-32
+ 8000408:	ce22                	sw	s0,28(sp)
+ 800040a:	1000                	addi	s0,sp,32
+ 800040c:	fea42623          	sw	a0,-20(s0)
+ 8000410:	87ae                	mv	a5,a1
+ 8000412:	fef405a3          	sb	a5,-21(s0)
+    while(!(USART0->STAT & USART_STAT_TBE)){}
+ 8000416:	400147b7          	lui	a5,0x40014
+ 800041a:	80078793          	addi	a5,a5,-2048 # 40013800 <_StackLimit+0x20013000>
+ 800041e:	439c                	lw	a5,0(a5)
+ 8000420:	0807f793          	andi	a5,a5,128
+ 8000424:	0017b793          	seqz	a5,a5
+ 8000428:	0ff7f793          	andi	a5,a5,255
+ 800042c:	c391                	beqz	a5,8000430 <_ZN5Uart08sendByteEh+0x2a>
+ 800042e:	b7e5                	j	8000416 <_ZN5Uart08sendByteEh+0x10>
+    USART0->DATA = byte;
+ 8000430:	400147b7          	lui	a5,0x40014
+ 8000434:	80078793          	addi	a5,a5,-2048 # 40013800 <_StackLimit+0x20013000>
+ 8000438:	feb44703          	lbu	a4,-21(s0)
+ 800043c:	c3d8                	sw	a4,4(a5)
+    while(!(USART0->STAT & USART_STAT_TC)){}
+ 800043e:	400147b7          	lui	a5,0x40014
+ 8000442:	80078793          	addi	a5,a5,-2048 # 40013800 <_StackLimit+0x20013000>
+ 8000446:	439c                	lw	a5,0(a5)
+ 8000448:	0407f793          	andi	a5,a5,64
+ 800044c:	0017b793          	seqz	a5,a5
+ 8000450:	0ff7f793          	andi	a5,a5,255
+ 8000454:	c391                	beqz	a5,8000458 <_ZN5Uart08sendByteEh+0x52>
+ 8000456:	b7e5                	j	800043e <_ZN5Uart08sendByteEh+0x38>
+}
+ 8000458:	0001                	nop
+ 800045a:	4472                	lw	s0,28(sp)
+ 800045c:	6105                	addi	sp,sp,32
+ 800045e:	8082                	ret
+
+08000460 <_ZN5Uart07sendStrEPc>:
+void Uart0::sendStr(char* str) {
+ 8000460:	1101                	addi	sp,sp,-32
+ 8000462:	ce06                	sw	ra,28(sp)
+ 8000464:	cc22                	sw	s0,24(sp)
+ 8000466:	1000                	addi	s0,sp,32
+ 8000468:	fea42623          	sw	a0,-20(s0)
+ 800046c:	feb42423          	sw	a1,-24(s0)
+    while(*str!='\0') {
+ 8000470:	fe842783          	lw	a5,-24(s0)
+ 8000474:	0007c783          	lbu	a5,0(a5)
+ 8000478:	cf99                	beqz	a5,8000496 <_ZN5Uart07sendStrEPc+0x36>
+        sendByte(*str);
+ 800047a:	fe842783          	lw	a5,-24(s0)
+ 800047e:	0007c783          	lbu	a5,0(a5)
+ 8000482:	85be                	mv	a1,a5
+ 8000484:	fec42503          	lw	a0,-20(s0)
+ 8000488:	3fbd                	jal	8000406 <_ZN5Uart08sendByteEh>
+        str++;
+ 800048a:	fe842783          	lw	a5,-24(s0)
+ 800048e:	0785                	addi	a5,a5,1
+ 8000490:	fef42423          	sw	a5,-24(s0)
+    while(*str!='\0') {
+ 8000494:	bff1                	j	8000470 <_ZN5Uart07sendStrEPc+0x10>
+    }
+}
+ 8000496:	0001                	nop
+ 8000498:	40f2                	lw	ra,28(sp)
+ 800049a:	4462                	lw	s0,24(sp)
+ 800049c:	6105                	addi	sp,sp,32
+ 800049e:	8082                	ret
+
+080004a0 <_ZN5Uart04initEv>:
+
+void Uart0::init() {
+ 80004a0:	1101                	addi	sp,sp,-32
+ 80004a2:	ce22                	sw	s0,28(sp)
+ 80004a4:	1000                	addi	s0,sp,32
+ 80004a6:	fea42623          	sw	a0,-20(s0)
+    // Tx A9 Rx A10
+    RCC->APB2ENR |= RCC_APB2ENR_IOPAEN | RCC_APB2ENR_AFIOEN;       
+ 80004aa:	400217b7          	lui	a5,0x40021
+ 80004ae:	4f98                	lw	a4,24(a5)
+ 80004b0:	400217b7          	lui	a5,0x40021
+ 80004b4:	00576713          	ori	a4,a4,5
+ 80004b8:	cf98                	sw	a4,24(a5)
+    GPIOA->CRH = 0;
+ 80004ba:	400117b7          	lui	a5,0x40011
+ 80004be:	80078793          	addi	a5,a5,-2048 # 40010800 <_StackLimit+0x20010000>
+ 80004c2:	0007a223          	sw	zero,4(a5)
+    GPIOA->CRH |=  (1<<6) | (3<<4); //CTL9=0:1; MD9=1:1  AF push-pull max speed
+ 80004c6:	400117b7          	lui	a5,0x40011
+ 80004ca:	80078793          	addi	a5,a5,-2048 # 40010800 <_StackLimit+0x20010000>
+ 80004ce:	43d8                	lw	a4,4(a5)
+ 80004d0:	400117b7          	lui	a5,0x40011
+ 80004d4:	80078793          	addi	a5,a5,-2048 # 40010800 <_StackLimit+0x20010000>
+ 80004d8:	07076713          	ori	a4,a4,112
+ 80004dc:	c3d8                	sw	a4,4(a5)
+    GPIOA->CRH |=  (1<<10) | (0<<8); //CTL10=0:1; MD9=0:0  input floating (HiZ)
+ 80004de:	400117b7          	lui	a5,0x40011
+ 80004e2:	80078793          	addi	a5,a5,-2048 # 40010800 <_StackLimit+0x20010000>
+ 80004e6:	43d8                	lw	a4,4(a5)
+ 80004e8:	400117b7          	lui	a5,0x40011
+ 80004ec:	80078793          	addi	a5,a5,-2048 # 40010800 <_StackLimit+0x20010000>
+ 80004f0:	40076713          	ori	a4,a4,1024
+ 80004f4:	c3d8                	sw	a4,4(a5)
+    RCC->APB2ENR |= RCC_APB2ENR_USART0EN;
+ 80004f6:	400217b7          	lui	a5,0x40021
+ 80004fa:	4f94                	lw	a3,24(a5)
+ 80004fc:	400217b7          	lui	a5,0x40021
+ 8000500:	6711                	lui	a4,0x4
+ 8000502:	8f55                	or	a4,a4,a3
+ 8000504:	cf98                	sw	a4,24(a5)
+    USART0->BAUD = 0x341;//(8000000-4800)/9600 = 832,8 = 0x341
+ 8000506:	400147b7          	lui	a5,0x40014
+ 800050a:	80078793          	addi	a5,a5,-2048 # 40013800 <_StackLimit+0x20013000>
+ 800050e:	34100713          	li	a4,833
+ 8000512:	c798                	sw	a4,8(a5)
+    USART0->CTL0 |= (USART_CTL0_UEN | USART_CTL0_REN | USART_CTL0_TEN | USART_CTL0_RBNEIE | USART_CTL0_TCIE);
+ 8000514:	400147b7          	lui	a5,0x40014
+ 8000518:	80078793          	addi	a5,a5,-2048 # 40013800 <_StackLimit+0x20013000>
+ 800051c:	47d4                	lw	a3,12(a5)
+ 800051e:	400147b7          	lui	a5,0x40014
+ 8000522:	80078793          	addi	a5,a5,-2048 # 40013800 <_StackLimit+0x20013000>
+ 8000526:	6709                	lui	a4,0x2
+ 8000528:	06c70713          	addi	a4,a4,108 # 206c <__stack_size+0x186c>
+ 800052c:	8f55                	or	a4,a4,a3
+ 800052e:	c7d8                	sw	a4,12(a5)
+}
+ 8000530:	0001                	nop
+ 8000532:	4472                	lw	s0,28(sp)
+ 8000534:	6105                	addi	sp,sp,32
+ 8000536:	8082                	ret
