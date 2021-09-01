@@ -11,17 +11,20 @@ int main() {
     GPIOC->BSRR |= (1<<29);
     GPIOC->BSRR |= (1<<13);
     Uart0 uart;
-    uint8_t count = 0;
+    uint8_t count = 0x30;
     while (1) {
         uart.sendByte(count++);        
+        if(count == 0x50) {
+            count = 0;
+        }
         //GPIOC->BSRR |= (1<<29);
         //delay(500000);
         //GPIOC->BSRR |= (1<<13);
         //delay(1000000);
          GPIOC->ODR |= (1<<13);
-         delay(500000);
+         delay(50000);
          GPIOC->ODR &=~ (1<<13);
-         delay(500000);
+         delay(50000);
     }
     return 0;
 }

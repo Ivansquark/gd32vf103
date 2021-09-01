@@ -20,7 +20,7 @@ void Uart0::init() {
     // Tx A9 Rx A10
     RCC->APB2ENR |= RCC_APB2ENR_IOPAEN | RCC_APB2ENR_AFIOEN;       
     GPIOA->CRH = 0;
-    GPIOA->CRH |=  (1<<6) | (3<<4); //CTL9=0:1; MD9=1:1  AF push-pull max speed
+    GPIOA->CRH |=  (1<<7) | (3<<4); //CTL9=1:0; MD9=1:1  AF push-pull max speed
     GPIOA->CRH |=  (1<<10) | (0<<8); //CTL10=0:1; MD9=0:0  input floating (HiZ)
     RCC->APB2ENR |= RCC_APB2ENR_USART0EN;
     USART0->BAUD = 0x341;//(8000000-4800)/9600 = 832,8 = 0x341
