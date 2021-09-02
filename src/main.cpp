@@ -1,19 +1,20 @@
-#define __STDC_HOSTED__ 0
 #include "riscv_encoding.h"
 #include "gd32vf103.h"
 #include "uart0.h"
 
 void gpioInit();
 void delay(volatile uint32_t val);
-
+Uart0 uart;
 int main() {
+    int i = -7;
+    
     gpioInit();   
     GPIOC->BSRR |= (1<<29);
     GPIOC->BSRR |= (1<<13);
-    Uart0 uart;
+    GPIOC->BSRR |= (1<<29);
     uint8_t count = 0x30;
     while (1) {
-        uart.sendByte(count++);        
+        //uart.sendByte(count++);        
         if(count == 0x50) {
             count = 0;
         }
@@ -21,9 +22,9 @@ int main() {
         //delay(500000);
         //GPIOC->BSRR |= (1<<13);
         //delay(1000000);
-         GPIOC->ODR |= (1<<13);
+         //GPIOC->ODR |= (1<<13);
          delay(50000);
-         GPIOC->ODR &=~ (1<<13);
+         //GPIOC->ODR &=~ (1<<13);
          delay(50000);
     }
     return 0;
@@ -41,9 +42,15 @@ void delay(volatile uint32_t val) {
     }
 }
 
-void USART0_IRQn_handler() {
-    GPIOC->ODR |= (1 << 13);
-    delay(100000);
-    GPIOC->ODR &= ~(1 << 13);
-    delay(100000);
+extern "C" void USART0_IRQn_handler() {
+    // GPIOC->ODR |= (1 << 13);
+    // delay(100000);
+    // GPIOC->ODR &= ~(1 << 13);
+    // delay(100000);
+    //USART0->STAT &=~ USART_STAT_RBNE;
+    GPIOC->ODR ^= (1<<13);
+    uint8_t byte = USART0->DATA;
+    //  Uart0::pThis->sendByte('O');
+    //  Uart0::pThis->sendByte('P');
+    //  Uart0::pThis->sendByte('A');
 }

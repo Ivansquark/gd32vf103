@@ -11,11 +11,12 @@ AS = riscv64-unknown-elf-as
 OBJCOPY = riscv64-unknown-elf-objcopy  
 OBJDUMP = riscv64-unknown-elf-objdump
 CFLAGS = -g -O0 -march=rv32imac -mabi=ilp32 -mcmodel=medlow -nostdlib  
-CPPFLAGS = -g -O0 -march=rv32imac -mabi=ilp32 -mcmodel=medlow -nostdlib -Wall \
+CPPFLAGS = -g -O0 -march=rv32imac -mabi=ilp32 -mcmodel=medlow -Wall \
 			-nostartfiles -fno-common -D"assert_param(x)=" \
 			-ffunction-sections -Wno-pointer-arith -fno-rtti
 #-mcmodel=medany
-LFLAGS = -T$(LIB)GD32VF103.ld -Xlinker -Map=$(BLD)prog.map
+LFLAGS = -T$(LIB)GD32VF103.ld -Xlinker -Map=$(BLD)prog.map \
+		 -fno-use-cxa-atexit -lstdc++ -L/opt/riscv32/riscv32-unknown-elf/lib
 ASFLAGS = -march=rv32imac -mabi=ilp32 
 
 all: $(BLD)prog.elf $(BLD)prog.bin $(BLD)prog.lst $(BLD)prog.hex
@@ -29,7 +30,10 @@ $(BLD)prog.lst: $(BLD)prog.elf
 #$(BLD)main.elf: $(SRC)start.s
 #	$(CC) $(SRC)start.s -o $(BLD)main.elf $(CFLAGS) $(LFLAGS)
 $(BLD)prog.elf: $(BLD)main.o $(BLD)startup.o $(BLD)startjump.o $(BLD)uart0.o
-	$(CC) $(BLD)startup.o $(BLD)main.o $(BLD)uart0.o $(BLD)startjump.o $(LFLAGS) -o $(BLD)prog.elf $(CPPFLAGS) $(INC)
+$(BLD)prog.elf: $(BLD)interrupt.o
+	$(CC) $(BLD)startup.o $(BLD)main.o $(BLD)uart0.o $(BLD)startjump.o \
+	$(BLD)interrupt.o \
+	$(LFLAGS) -o $(BLD)prog.elf $(CPPFLAGS) $(INC)
 	@echo "********************  SIZE  **************************"
 	@riscv64-unknown-elf-size $(BLD)prog.elf
 	@echo "******************************************************"	
@@ -39,6 +43,9 @@ $(BLD)startjump.o: $(LIB)startjump.s
 $(BLD)startup.o: $(LIB)startup.cpp
 	$(CPP) -c $(LIB)startup.cpp -o $(BLD)startup.o $(CFLAGS)
 	$(OBJDUMP) -dr -S $(BLD)startup.o > $(BLD)startup.lst
+$(BLD)interrupt.o: $(SRC)interrupt.cpp
+	$(CPP) -c $(SRC)interrupt.cpp -o $(BLD)interrupt.o $(CPPFLAGS) $(INC) -I$(LIB)
+	$(OBJDUMP) -dr -S $(BLD)interrupt.o > $(BLD)interrupt.lst	
 $(BLD)main.o: $(SRC)main.cpp
 	$(CPP) -c $(SRC)main.cpp -o $(BLD)main.o $(CPPFLAGS) $(INC) -I$(LIB)
 	$(OBJDUMP) -dr -S $(BLD)main.o > $(BLD)main.lst

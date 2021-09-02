@@ -3,4 +3,4 @@
 .section .startjump,"a",%progbits
 .global StartJ
 StartJ:
-jal _Z13Reset_Handlerv
+jal Reset_Handler

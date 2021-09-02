@@ -1,0 +1,318 @@
+
+build/uart0.o:     file format elf32-littleriscv
+
+
+Disassembly of section .text._Z10eclic_initv:
+
+00000000 <_Z10eclic_initv>:
+constexpr uint8_t  ECLICINTCTLBITS = 0x4;
+
+asm(".equ CSR_MSTATUS, 0x300 \n"
+    ".equ CSR_MTVEC, 0x305 \n"
+    ".equ MSTATUS_MIE, (1<<3) \n");
+inline void eclic_init(){
+   0:	1141                	addi	sp,sp,-16
+   2:	c622                	sw	s0,12(sp)
+   4:	0800                	addi	s0,sp,16
+    asm("la t0,  CSR_MTVEC \n"
+        "la t1, 0xFFFFFFC0 \n"
+        "and t0, t0, t1    \n"
+        "ori t0, t0, 3     \n"
+        "csrw CSR_MTVEC, t0  # set eclic ");
+   6:	30500293          	li	t0,773
+   a:	fc000313          	li	t1,-64
+   e:	0062f2b3          	and	t0,t0,t1
+  12:	0032e293          	ori	t0,t0,3
+  16:	30529073          	csrw	mtvec,t0
+}
+  1a:	0001                	nop
+  1c:	4432                	lw	s0,12(sp)
+  1e:	0141                	addi	sp,sp,16
+  20:	8082                	ret
+
+Disassembly of section .text._Z15interruptEnablev:
+
+00000000 <_Z15interruptEnablev>:
+inline void interruptEnable() {
+   0:	1141                	addi	sp,sp,-16
+   2:	c622                	sw	s0,12(sp)
+   4:	0800                	addi	s0,sp,16
+    asm("csrrs zero, CSR_MSTATUS, MSTATUS_MIE");
+   6:	30046073          	csrsi	mstatus,8
+}
+   a:	0001                	nop
+   c:	4432                	lw	s0,12(sp)
+   e:	0141                	addi	sp,sp,16
+  10:	8082                	ret
+
+Disassembly of section .text._Z22eclic_enable_interruptm:
+
+00000000 <_Z22eclic_enable_interruptm>:
+inline void eclic_enable_interrupt (uint32_t source) {
+   0:	1101                	addi	sp,sp,-32
+   2:	ce22                	sw	s0,28(sp)
+   4:	1000                	addi	s0,sp,32
+   6:	fea42623          	sw	a0,-20(s0)
+    *(volatile uint8_t*)(ECLIC_ADDR_BASE+ECLIC_INT_IE_OFFSET+source*4) = 1;
+   a:	fec42783          	lw	a5,-20(s0)
+   e:	00279713          	slli	a4,a5,0x2
+  12:	d20017b7          	lui	a5,0xd2001
+  16:	0785                	addi	a5,a5,1
+  18:	97ba                	add	a5,a5,a4
+  1a:	873e                	mv	a4,a5
+  1c:	4785                	li	a5,1
+  1e:	00f70023          	sb	a5,0(a4)
+}
+  22:	0001                	nop
+  24:	4472                	lw	s0,28(sp)
+  26:	6105                	addi	sp,sp,32
+  28:	8082                	ret
+
+Disassembly of section .text._Z17eclic_set_intattrmh:
+
+00000000 <_Z17eclic_set_intattrmh>:
+
+inline uint8_t eclic_get_intctrl  (uint32_t source){
+  return *(volatile uint8_t*)(ECLIC_ADDR_BASE+ECLIC_INT_CTRL_OFFSET+source*4);
+}
+
+inline void eclic_set_intattr (uint32_t source, uint8_t intattr){
+   0:	1101                	addi	sp,sp,-32
+   2:	ce22                	sw	s0,28(sp)
+   4:	1000                	addi	s0,sp,32
+   6:	fea42623          	sw	a0,-20(s0)
+   a:	87ae                	mv	a5,a1
+   c:	fef405a3          	sb	a5,-21(s0)
+  *(volatile uint8_t*)(ECLIC_ADDR_BASE+ECLIC_INT_ATTR_OFFSET+source*4) = intattr;
+  10:	fec42783          	lw	a5,-20(s0)
+  14:	00279713          	slli	a4,a5,0x2
+  18:	d20017b7          	lui	a5,0xd2001
+  1c:	0789                	addi	a5,a5,2
+  1e:	97ba                	add	a5,a5,a4
+  20:	873e                	mv	a4,a5
+  22:	feb44783          	lbu	a5,-21(s0)
+  26:	00f70023          	sb	a5,0(a4)
+}
+  2a:	0001                	nop
+  2c:	4472                	lw	s0,28(sp)
+  2e:	6105                	addi	sp,sp,32
+  30:	8082                	ret
+
+Disassembly of section .text._ZN5Uart0C2Ev:
+
+00000000 <_ZN5Uart0C1Ev>:
+#include "uart0.h"
+
+Uart0* Uart0::pThis = nullptr;
+
+Uart0::Uart0() {
+   0:	1101                	addi	sp,sp,-32
+   2:	ce06                	sw	ra,28(sp)
+   4:	cc22                	sw	s0,24(sp)
+   6:	1000                	addi	s0,sp,32
+   8:	fea42623          	sw	a0,-20(s0)
+    pThis = this;
+   c:	000007b7          	lui	a5,0x0
+			c: R_RISCV_HI20	_ZN5Uart05pThisE
+			c: R_RISCV_RELAX	*ABS*
+  10:	fec42703          	lw	a4,-20(s0)
+  14:	00e7a023          	sw	a4,0(a5) # 0 <_ZN5Uart0C1Ev>
+			14: R_RISCV_LO12_S	_ZN5Uart05pThisE
+			14: R_RISCV_RELAX	*ABS*
+    init();
+  18:	fec42503          	lw	a0,-20(s0)
+  1c:	00000097          	auipc	ra,0x0
+			1c: R_RISCV_CALL	_ZN5Uart04initEv
+			1c: R_RISCV_RELAX	*ABS*
+  20:	000080e7          	jalr	ra # 1c <_ZN5Uart0C1Ev+0x1c>
+}
+  24:	0001                	nop
+  26:	40f2                	lw	ra,28(sp)
+  28:	4462                	lw	s0,24(sp)
+  2a:	6105                	addi	sp,sp,32
+  2c:	8082                	ret
+
+Disassembly of section .text._ZN5Uart08sendByteEh:
+
+00000000 <_ZN5Uart08sendByteEh>:
+
+void Uart0::sendByte(uint8_t byte) {
+   0:	1101                	addi	sp,sp,-32
+   2:	ce22                	sw	s0,28(sp)
+   4:	1000                	addi	s0,sp,32
+   6:	fea42623          	sw	a0,-20(s0)
+   a:	87ae                	mv	a5,a1
+   c:	fef405a3          	sb	a5,-21(s0)
+
+00000010 <.L8>:
+    while(!(USART0->STAT & USART_STAT_TBE)){}
+  10:	400147b7          	lui	a5,0x40014
+  14:	80078793          	addi	a5,a5,-2048 # 40013800 <.LASF114+0x40013048>
+  18:	439c                	lw	a5,0(a5)
+  1a:	0807f793          	andi	a5,a5,128
+  1e:	0017b793          	seqz	a5,a5
+  22:	0ff7f793          	andi	a5,a5,255
+  26:	c391                	beqz	a5,2a <.L7>
+			26: R_RISCV_RVC_BRANCH	.L7
+  28:	b7e5                	j	10 <.L8>
+			28: R_RISCV_RVC_JUMP	.L8
+
+0000002a <.L7>:
+    USART0->DATA = byte;
+  2a:	400147b7          	lui	a5,0x40014
+  2e:	80078793          	addi	a5,a5,-2048 # 40013800 <.LASF114+0x40013048>
+  32:	feb44703          	lbu	a4,-21(s0)
+  36:	c3d8                	sw	a4,4(a5)
+
+00000038 <.L10>:
+    while(!(USART0->STAT & USART_STAT_TC)){}
+  38:	400147b7          	lui	a5,0x40014
+  3c:	80078793          	addi	a5,a5,-2048 # 40013800 <.LASF114+0x40013048>
+  40:	439c                	lw	a5,0(a5)
+  42:	0407f793          	andi	a5,a5,64
+  46:	0017b793          	seqz	a5,a5
+  4a:	0ff7f793          	andi	a5,a5,255
+  4e:	c391                	beqz	a5,52 <.L11>
+			4e: R_RISCV_RVC_BRANCH	.L11
+  50:	b7e5                	j	38 <.L10>
+			50: R_RISCV_RVC_JUMP	.L10
+
+00000052 <.L11>:
+}
+  52:	0001                	nop
+  54:	4472                	lw	s0,28(sp)
+  56:	6105                	addi	sp,sp,32
+  58:	8082                	ret
+
+Disassembly of section .text._ZN5Uart07sendStrEPc:
+
+00000000 <_ZN5Uart07sendStrEPc>:
+void Uart0::sendStr(char* str) {
+   0:	1101                	addi	sp,sp,-32
+   2:	ce06                	sw	ra,28(sp)
+   4:	cc22                	sw	s0,24(sp)
+   6:	1000                	addi	s0,sp,32
+   8:	fea42623          	sw	a0,-20(s0)
+   c:	feb42423          	sw	a1,-24(s0)
+
+00000010 <.L14>:
+    while(*str!='\0') {
+  10:	fe842783          	lw	a5,-24(s0)
+  14:	0007c783          	lbu	a5,0(a5)
+  18:	c395                	beqz	a5,3c <.L15>
+			18: R_RISCV_RVC_BRANCH	.L15
+        sendByte(*str);
+  1a:	fe842783          	lw	a5,-24(s0)
+  1e:	0007c783          	lbu	a5,0(a5)
+  22:	85be                	mv	a1,a5
+  24:	fec42503          	lw	a0,-20(s0)
+  28:	00000097          	auipc	ra,0x0
+			28: R_RISCV_CALL	_ZN5Uart08sendByteEh
+			28: R_RISCV_RELAX	*ABS*
+  2c:	000080e7          	jalr	ra # 28 <.L14+0x18>
+        str++;
+  30:	fe842783          	lw	a5,-24(s0)
+  34:	0785                	addi	a5,a5,1
+  36:	fef42423          	sw	a5,-24(s0)
+    while(*str!='\0') {
+  3a:	bfd9                	j	10 <.L14>
+			3a: R_RISCV_RVC_JUMP	.L14
+
+0000003c <.L15>:
+    }
+}
+  3c:	0001                	nop
+  3e:	40f2                	lw	ra,28(sp)
+  40:	4462                	lw	s0,24(sp)
+  42:	6105                	addi	sp,sp,32
+  44:	8082                	ret
+
+Disassembly of section .text._ZN5Uart04initEv:
+
+00000000 <_ZN5Uart04initEv>:
+
+void Uart0::init() {
+   0:	1101                	addi	sp,sp,-32
+   2:	ce06                	sw	ra,28(sp)
+   4:	cc22                	sw	s0,24(sp)
+   6:	1000                	addi	s0,sp,32
+   8:	fea42623          	sw	a0,-20(s0)
+    // Tx A9 Rx A10
+    RCC->APB2ENR |= RCC_APB2ENR_IOPAEN | RCC_APB2ENR_AFIOEN;       
+   c:	400217b7          	lui	a5,0x40021
+  10:	4f98                	lw	a4,24(a5)
+  12:	400217b7          	lui	a5,0x40021
+  16:	00576713          	ori	a4,a4,5
+  1a:	cf98                	sw	a4,24(a5)
+    GPIOA->CRH = 0;
+  1c:	400117b7          	lui	a5,0x40011
+  20:	80078793          	addi	a5,a5,-2048 # 40010800 <.LASF114+0x40010048>
+  24:	0007a223          	sw	zero,4(a5)
+    GPIOA->CRH |=  (1<<7) | (3<<4); //CTL9=1:0; MD9=1:1  AF push-pull max speed
+  28:	400117b7          	lui	a5,0x40011
+  2c:	80078793          	addi	a5,a5,-2048 # 40010800 <.LASF114+0x40010048>
+  30:	43d8                	lw	a4,4(a5)
+  32:	400117b7          	lui	a5,0x40011
+  36:	80078793          	addi	a5,a5,-2048 # 40010800 <.LASF114+0x40010048>
+  3a:	0b076713          	ori	a4,a4,176
+  3e:	c3d8                	sw	a4,4(a5)
+    GPIOA->CRH |=  (1<<10) | (0<<8); //CTL10=0:1; MD9=0:0  input floating (HiZ)
+  40:	400117b7          	lui	a5,0x40011
+  44:	80078793          	addi	a5,a5,-2048 # 40010800 <.LASF114+0x40010048>
+  48:	43d8                	lw	a4,4(a5)
+  4a:	400117b7          	lui	a5,0x40011
+  4e:	80078793          	addi	a5,a5,-2048 # 40010800 <.LASF114+0x40010048>
+  52:	40076713          	ori	a4,a4,1024
+  56:	c3d8                	sw	a4,4(a5)
+    RCC->APB2ENR |= RCC_APB2ENR_USART0EN;
+  58:	400217b7          	lui	a5,0x40021
+  5c:	4f94                	lw	a3,24(a5)
+  5e:	400217b7          	lui	a5,0x40021
+  62:	6711                	lui	a4,0x4
+  64:	8f55                	or	a4,a4,a3
+  66:	cf98                	sw	a4,24(a5)
+    USART0->BAUD = 0x341;//(8000000-4800)/9600 = 832,8 = 0x341
+  68:	400147b7          	lui	a5,0x40014
+  6c:	80078793          	addi	a5,a5,-2048 # 40013800 <.LASF114+0x40013048>
+  70:	34100713          	li	a4,833
+  74:	c798                	sw	a4,8(a5)
+    USART0->CTL0 |= (USART_CTL0_UEN | USART_CTL0_REN | USART_CTL0_TEN | USART_CTL0_RBNEIE);
+  76:	400147b7          	lui	a5,0x40014
+  7a:	80078793          	addi	a5,a5,-2048 # 40013800 <.LASF114+0x40013048>
+  7e:	47d4                	lw	a3,12(a5)
+  80:	400147b7          	lui	a5,0x40014
+  84:	80078793          	addi	a5,a5,-2048 # 40013800 <.LASF114+0x40013048>
+  88:	6709                	lui	a4,0x2
+  8a:	02c70713          	addi	a4,a4,44 # 202c <.LASF114+0x1874>
+  8e:	8f55                	or	a4,a4,a3
+  90:	c7d8                	sw	a4,12(a5)
+    
+    eclic_init();
+  92:	00000097          	auipc	ra,0x0
+			92: R_RISCV_CALL	_Z10eclic_initv
+			92: R_RISCV_RELAX	*ABS*
+  96:	000080e7          	jalr	ra # 92 <_ZN5Uart04initEv+0x92>
+    eclic_enable_interrupt(USART1_IRQn);
+  9a:	03800513          	li	a0,56
+  9e:	00000097          	auipc	ra,0x0
+			9e: R_RISCV_CALL	_Z22eclic_enable_interruptm
+			9e: R_RISCV_RELAX	*ABS*
+  a2:	000080e7          	jalr	ra # 9e <_ZN5Uart04initEv+0x9e>
+    eclic_set_intattr(USART1_IRQn, 1);
+  a6:	4585                	li	a1,1
+  a8:	03800513          	li	a0,56
+  ac:	00000097          	auipc	ra,0x0
+			ac: R_RISCV_CALL	_Z17eclic_set_intattrmh
+			ac: R_RISCV_RELAX	*ABS*
+  b0:	000080e7          	jalr	ra # ac <_ZN5Uart04initEv+0xac>
+    interruptEnable();
+  b4:	00000097          	auipc	ra,0x0
+			b4: R_RISCV_CALL	_Z15interruptEnablev
+			b4: R_RISCV_RELAX	*ABS*
+  b8:	000080e7          	jalr	ra # b4 <_ZN5Uart04initEv+0xb4>
+}
+  bc:	0001                	nop
+  be:	40f2                	lw	ra,28(sp)
+  c0:	4462                	lw	s0,24(sp)
+  c2:	6105                	addi	sp,sp,32
+  c4:	8082                	ret

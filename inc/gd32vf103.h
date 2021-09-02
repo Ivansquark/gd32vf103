@@ -5,6 +5,7 @@
  * Written to be as compatible as possible with STM32F1 code.
  * These definitions are incomplete and application-specific.
  */
+#define __STDC_HOSTED__ 0
 #include <stdint.h>
 
 /**

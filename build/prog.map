@@ -1,0 +1,316 @@
+
+Discarded input sections
+
+ .group         0x0000000000000000        0x8 build/uart0.o
+ .group         0x0000000000000000        0x8 build/uart0.o
+ .group         0x0000000000000000        0x8 build/uart0.o
+ .group         0x0000000000000000        0x8 build/uart0.o
+
+Memory Configuration
+
+Name             Origin             Length             Attributes
+flash            0x0000000008000000 0x0000000000020000 axrl !w
+ram              0x0000000020000000 0x0000000000008000 axw !rl
+*default*        0x0000000000000000 0xffffffffffffffff
+
+Linker script and memory map
+
+LOAD build/startup.o
+LOAD build/main.o
+LOAD build/uart0.o
+LOAD build/startjump.o
+LOAD build/interrupt.o
+LOAD /opt/riscv32/riscv32-unknown-elf/lib/libstdc++.a
+LOAD /usr/lib/gcc/riscv64-unknown-elf/8.3.0/rv32imac/ilp32/libgcc.a
+START GROUP
+LOAD /opt/riscv32/riscv32-unknown-elf/lib/libc.a
+LOAD /opt/riscv32/riscv32-unknown-elf/lib/libgloss.a
+END GROUP
+LOAD /usr/lib/gcc/riscv64-unknown-elf/8.3.0/rv32imac/ilp32/libgcc.a
+                0x0000000000000800                __stack_size = DEFINED (__stack_size)?__stack_size:0x800
+                0x0000000000000000                . = ALIGN (0x4)
+
+.startjump      0x0000000008000000        0x4
+ .startjump     0x0000000008000000        0x4 build/startjump.o
+                0x0000000008000000                StartJ
+                0x0000000008000004                . = ALIGN (0x4)
+
+.vectors        0x0000000008000004      0x158
+ *(SORT_NONE(.vectors))
+ .vectors       0x0000000008000004      0x158 build/startup.o
+                0x0000000008000004                Vectors
+
+.text           0x000000000800015c      0x4bc
+ *(.text .text.*)
+ .text          0x000000000800015c      0x15e build/startup.o
+                0x000000000800015c                _init()
+                0x000000000800016a                _fini()
+                0x0000000008000178                __libc_init_array
+                0x0000000008000220                __libc_fini_array
+                0x0000000008000280                Reset_Handler
+                0x00000000080002b2                USART1_IRQn_handler
+                0x00000000080002b2                DMA1_chan3_IRQn_handler
+                0x00000000080002b2                DMA0_chan4_IRQn_handler
+                0x00000000080002b2                TIM4_IRQn_handler
+                0x00000000080002b2                UART3_IRQn_handler
+                0x00000000080002b2                eclic_msip_handler
+                0x00000000080002b2                ADC0_1_IRQn_handler
+                0x00000000080002b2                CAN0_RX1_IRQn_handler
+                0x00000000080002b2                EXTI3_IRQn_handler
+                0x00000000080002b2                TIM0_trigger_commutation_IRQn_handler
+                0x00000000080002b2                SPI0_IRQn_handler
+                0x00000000080002b2                DMA1_chan4_IRQn_handler
+                0x00000000080002b2                DMA0_chan1_IRQn_handler
+                0x00000000080002b2                eclic_mtip_handler
+                0x00000000080002b2                DMA0_chan5_IRQn_handler
+                0x00000000080002b2                CAN1_EWMC_IRQn_handler
+                0x00000000080002b2                USART2_IRQn_handler
+                0x00000000080002b2                DMA0_chan3_IRQn_handler
+                0x00000000080002b2                RCU_IRQn_handler
+                0x00000000080002b2                RTC_IRQn_handler
+                0x00000000080002b2                CAN1_RX1_IRQn_handler
+                0x00000000080002b2                USB_IRQn_handler
+                0x00000000080002b2                DMA1_chan1_IRQn_handler
+                0x00000000080002b2                TIM0_channel_IRQn_handler
+                0x00000000080002b2                I2C0_EV_IRQn_handler
+                0x00000000080002b2                Default_Handler
+                0x00000000080002b2                TIM1_IRQn_handler
+                0x00000000080002b2                EXTI2_IRQn_handler
+                0x00000000080002b2                TIM5_IRQn_handler
+                0x00000000080002b2                DMA0_chan6_IRQn_handler
+                0x00000000080002b2                EXTI1_IRQn_handler
+                0x00000000080002b2                CAN0_RX0_IRQn_handler
+                0x00000000080002b2                I2C1_EV_IRQn_handler
+                0x00000000080002b2                SPI1_IRQn_handler
+                0x00000000080002b2                eclic_bwei_handler
+                0x00000000080002b2                EXTI4_IRQn_handler
+                0x00000000080002b2                DMA0_chan2_IRQn_handler
+                0x00000000080002b2                LVD_IRQn_handler
+                0x00000000080002b2                DMA1_chan0_IRQn_handler
+                0x00000000080002b2                CAN1_RX0_IRQn_handler
+                0x00000000080002b2                EXTI0_IRQn_handler
+                0x00000000080002b2                SPI2_IRQn_handler
+                0x00000000080002b2                FMC_IRQn_handler
+                0x00000000080002b2                EXTI5_9_IRQn_handler
+                0x00000000080002b2                UART4_IRQn_handler
+                0x00000000080002b2                CAN1_TX_IRQn_handler
+                0x00000000080002b2                TIM0_break_IRQn_handler
+                0x00000000080002b2                I2C1_ER_IRQn_handler
+                0x00000000080002b2                eclic_pmovi_handler
+                0x00000000080002b2                RTC_alarm_IRQn_handler
+                0x00000000080002b2                CAN0_EWMC_IRQn_handler
+                0x00000000080002b2                CAN0_TX_IRQn_handler
+                0x00000000080002b2                I2C0_ER_IRQn_handler
+                0x00000000080002b2                USB_wakeup_IRQn_handler
+                0x00000000080002b2                TIM3_IRQn_handler
+                0x00000000080002b2                tamper_IRQn_handler
+                0x00000000080002b2                TIM6_IRQn_handler
+                0x00000000080002b2                EXMC_IRQn_handler
+                0x00000000080002b2                TIM0_update_IRQn_handler
+                0x00000000080002b2                TIM2_IRQn_handler
+                0x00000000080002b2                DMA0_chan0_IRQn_handler
+                0x00000000080002b2                watchdog_IRQn_handler
+                0x00000000080002b2                EXTI10_15_IRQn_handler
+                0x00000000080002b2                DMA1_chan2_IRQn_handler
+ .text          0x00000000080002ba        0x0 build/main.o
+ .text.main     0x00000000080002ba       0x6e build/main.o
+                0x00000000080002ba                main
+ .text._Z8gpioInitv
+                0x0000000008000328       0x44 build/main.o
+                0x0000000008000328                gpioInit()
+ .text._Z5delaym
+                0x000000000800036c       0x2c build/main.o
+                0x000000000800036c                delay(unsigned long)
+ .text.USART0_IRQn_handler
+                0x0000000008000398       0x2c build/main.o
+                0x0000000008000398                USART0_IRQn_handler
+ .text._Z41__static_initialization_and_destruction_0ii
+                0x00000000080003c4       0x3a build/main.o
+ .text._GLOBAL__sub_I_uart
+                0x00000000080003fe       0x1a build/main.o
+ .text          0x0000000008000418        0x0 build/uart0.o
+ .text._Z10eclic_initv
+                0x0000000008000418       0x22 build/uart0.o
+                0x0000000008000418                eclic_init()
+ .text._Z15interruptEnablev
+                0x000000000800043a       0x12 build/uart0.o
+                0x000000000800043a                interruptEnable()
+ .text._Z22eclic_enable_interruptm
+                0x000000000800044c       0x2a build/uart0.o
+                0x000000000800044c                eclic_enable_interrupt(unsigned long)
+ .text._Z17eclic_set_intattrmh
+                0x0000000008000476       0x32 build/uart0.o
+                0x0000000008000476                eclic_set_intattr(unsigned long, unsigned char)
+ .text._ZN5Uart0C2Ev
+                0x00000000080004a8       0x28 build/uart0.o
+                0x00000000080004a8                Uart0::Uart0()
+                0x00000000080004a8                Uart0::Uart0()
+ .text._ZN5Uart08sendByteEh
+                0x00000000080004d0       0x5a build/uart0.o
+                0x00000000080004d0                Uart0::sendByte(unsigned char)
+ .text._ZN5Uart07sendStrEPc
+                0x000000000800052a       0x40 build/uart0.o
+                0x000000000800052a                Uart0::sendStr(char*)
+ .text._ZN5Uart04initEv
+                0x000000000800056a       0xae build/uart0.o
+                0x000000000800056a                Uart0::init()
+ .text          0x0000000008000618        0x0 build/startjump.o
+ .text          0x0000000008000618        0x0 build/interrupt.o
+ *(.gnu.linkonce.t.*)
+                0x0000000008000618                . = ALIGN (0x4)
+
+.init           0x0000000008000618        0x4
+ *(SORT_NONE(.init))
+ *(SORT_NONE(.fini))
+                0x0000000008000618                . = ALIGN (0x4)
+                0x0000000008000618                PROVIDE (__preinit_array_start = .)
+                0x0000000008000618                PROVIDE (__init_array_start = .)
+ *(SORT_BY_NAME(.init_array.*))
+ *(.init_array)
+ .init_array    0x0000000008000618        0x4 build/main.o
+                0x000000000800061c                PROVIDE (__init_array_end = .)
+                0x000000000800061c                PROVIDE (__fini_array_start = .)
+ *(SORT_BY_NAME(.fini_array.*))
+ *(.fini_array)
+                0x000000000800061c                PROVIDE (__fini_array_end = .)
+                0x000000000800061c                . = ALIGN (0x4)
+                0x000000000800061c                . = ALIGN (0x4)
+                [!provide]                        PROVIDE (_eilm = .)
+
+.rodata         0x000000000800061c        0x0
+                0x000000000800061c                . = ALIGN (0x4)
+ *(.rodata)
+ *(.rodata*)
+ *(vtable)
+                [!provide]                        PROVIDE (__etext = .)
+                [!provide]                        PROVIDE (_etext = .)
+                [!provide]                        PROVIDE (etext = .)
+
+.eh_frame       0x000000000800061c      0x2e4
+ .eh_frame      0x000000000800061c       0xdc build/startup.o
+ .eh_frame      0x00000000080006f8       0xdc build/main.o
+                                         0xf0 (size before relaxing)
+ .eh_frame      0x00000000080007d4      0x12c build/uart0.o
+                                        0x140 (size before relaxing)
+
+.srodata        0x0000000008000900       0x4d
+ .srodata       0x0000000008000900       0x25 build/main.o
+ *fill*         0x0000000008000925        0x3 
+ .srodata       0x0000000008000928       0x25 build/uart0.o
+
+.rela.dyn       0x0000000008000950        0x0
+ .rela.text     0x0000000008000950        0x0 build/startup.o
+ .rela.vectors  0x0000000008000950        0x0 build/startup.o
+ .rela.text._ZN5Uart04initEv
+                0x0000000008000950        0x0 build/startup.o
+                0x0000000008000950                . = ALIGN (0x8)
+
+.stack          0x0000000020000000      0x800
+                0x0000000020000000                . = ALIGN (0x8)
+                0x0000000020000000                _stack_begin = .
+                0x0000000020000800                _StackLimit = (_stack_begin + __stack_size)
+                0x0000000020000800                . = (. + __stack_size)
+ *fill*         0x0000000020000000      0x800 
+                0x0000000020000800                _StackTop = .
+                0x0000000020000800                . = ALIGN (0x8)
+                0x0000000020000800                PROVIDE (_estack = _StackTop)
+                0x0000000020000800                _sidata = .
+
+.data           0x0000000020000800        0x0 load address 0x000000000800094d
+ *(.rdata)
+                0x0000000020000800                . = ALIGN (0x4)
+                [!provide]                        PROVIDE (__global_pointer$ = (. + 0x800))
+ *(.sdata .sdata.*)
+ .data          0x0000000020000800        0x0 build/startup.o
+ .data          0x0000000020000800        0x0 build/main.o
+ .data          0x0000000020000800        0x0 build/uart0.o
+ .data          0x0000000020000800        0x0 build/startjump.o
+ .data          0x0000000020000800        0x0 build/interrupt.o
+                0x0000000020000800                . = ALIGN (0x8)
+                [!provide]                        PROVIDE (_edata = .)
+                [!provide]                        PROVIDE (edata = .)
+                [!provide]                        PROVIDE (_fbss = .)
+                [!provide]                        PROVIDE (_sbss = .)
+
+.bss            0x0000000020000800        0x8
+ *(.sbss*)
+ .sbss          0x0000000020000800        0x1 build/main.o
+                0x0000000020000800                uart
+ *fill*         0x0000000020000801        0x3 
+ .sbss          0x0000000020000804        0x4 build/uart0.o
+                0x0000000020000804                Uart0::pThis
+ *(.gnu.linkonce.sb.*)
+ *(.bss .bss.*)
+ .bss           0x0000000020000808        0x0 build/startup.o
+ .bss           0x0000000020000808        0x0 build/main.o
+ .bss           0x0000000020000808        0x0 build/uart0.o
+ .bss           0x0000000020000808        0x0 build/startjump.o
+ .bss           0x0000000020000808        0x0 build/interrupt.o
+ *(.gnu.linkonce.b.*)
+ *(COMMON)
+                0x0000000020000808                . = ALIGN (0x4)
+                0x0000000020000808                . = ALIGN (0x8)
+                [!provide]                        PROVIDE (_ebss = .)
+                [!provide]                        PROVIDE (end = .)
+
+.heap           0x0000000020000808        0x0
+                [!provide]                        PROVIDE (_heap_end = .)
+OUTPUT(build/prog.elf elf32-littleriscv)
+
+.debug_info     0x0000000000000000      0xcec
+ .debug_info    0x0000000000000000      0x1a4 build/startup.o
+ .debug_info    0x00000000000001a4      0x489 build/main.o
+ .debug_info    0x000000000000062d      0x6bf build/uart0.o
+
+.debug_abbrev   0x0000000000000000      0x509
+ .debug_abbrev  0x0000000000000000      0x105 build/startup.o
+ .debug_abbrev  0x0000000000000105      0x1f4 build/main.o
+ .debug_abbrev  0x00000000000002f9      0x210 build/uart0.o
+
+.debug_aranges  0x0000000000000000       0xc0
+ .debug_aranges
+                0x0000000000000000       0x20 build/startup.o
+ .debug_aranges
+                0x0000000000000020       0x48 build/main.o
+ .debug_aranges
+                0x0000000000000068       0x58 build/uart0.o
+
+.debug_line     0x0000000000000000      0x648
+ .debug_line    0x0000000000000000      0x1cb build/startup.o
+ .debug_line    0x00000000000001cb      0x1d3 build/main.o
+ .debug_line    0x000000000000039e      0x2aa build/uart0.o
+ .debug_line    0x0000000000000648        0x0 build/interrupt.o
+
+.debug_str      0x0000000000000000      0x938
+ .debug_str     0x0000000000000000      0x177 build/startup.o
+                                        0x18a (size before relaxing)
+ .debug_str     0x0000000000000177      0x34b build/main.o
+                                        0x3e1 (size before relaxing)
+ .debug_str     0x00000000000004c2      0x464 build/uart0.o
+                                        0x7be (size before relaxing)
+ .debug_str     0x0000000000000926       0x12 build/interrupt.o
+                                         0xa5 (size before relaxing)
+
+.comment        0x0000000000000000        0xe
+ .comment       0x0000000000000000        0xe build/startup.o
+                                          0xf (size before relaxing)
+ .comment       0x000000000000000e        0xf build/main.o
+ .comment       0x000000000000000e        0xf build/uart0.o
+ .comment       0x000000000000000e        0xf build/interrupt.o
+
+.riscv.attributes
+                0x0000000000000000       0x2b
+ .riscv.attributes
+                0x0000000000000000       0x2b build/startup.o
+ .riscv.attributes
+                0x000000000000002b       0x2b build/main.o
+ .riscv.attributes
+                0x0000000000000056       0x2b build/uart0.o
+ .riscv.attributes
+                0x0000000000000081       0x29 build/startjump.o
+ .riscv.attributes
+                0x00000000000000aa       0x2b build/interrupt.o
+
+.debug_ranges   0x0000000000000000       0x80
+ .debug_ranges  0x0000000000000000       0x38 build/main.o
+ .debug_ranges  0x0000000000000038       0x48 build/uart0.o
