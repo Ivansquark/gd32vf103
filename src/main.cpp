@@ -42,15 +42,9 @@ void delay(volatile uint32_t val) {
     }
 }
 
-extern "C" void USART0_IRQn_handler() {
-    // GPIOC->ODR |= (1 << 13);
-    // delay(100000);
-    // GPIOC->ODR &= ~(1 << 13);
-    // delay(100000);
-    //USART0->STAT &=~ USART_STAT_RBNE;
+//need to add __attribute__((interrupt)) for saving context in memory
+extern "C" __attribute__((interrupt)) void USART0_IRQn_handler() {
     GPIOC->ODR ^= (1<<13);
     uint8_t byte = USART0->DATA;
-    //  Uart0::pThis->sendByte('O');
-    //  Uart0::pThis->sendByte('P');
-    //  Uart0::pThis->sendByte('A');
+    Uart0::pThis->sendByte(byte);
 }
