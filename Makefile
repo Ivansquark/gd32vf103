@@ -60,13 +60,18 @@ clean:
 load:
 #	stm32flash /dev/ttyUSB0 -w $(BLD)main.bin
 #	dfu-util -a 0 -d 28e9:0189 -s 0x08000000 -D $(BLD)prog.bin
-	openocd -s /usr/share/openocd/scripts -f lib/interface_ftdi.cfg -f lib/gd32vf103.cfg \
+#	openocd -s /usr/share/openocd/scripts -f lib/interface_ftdi.cfg -f lib/gd32vf103.cfg \
+#	-c "program $(BLD)prog.elf reset exit 0x08000000"
+	openocd -s /usr/share/openocd/scripts -f lib/interface_RV.cfg -f lib/gd32vf103.cfg \
 	-c "program $(BLD)prog.elf reset exit 0x08000000"
 
 # ****  instruction to use dfu-util without sudo *******
 # sudo nano /etc/udev/rules.d/99-particles.rules
-# SUBSYSTEMS=="usb", ATTRS{idVendor}=="28e9", ATTRS{idProduct}=="0189", GROUP="plugdev", MODE="0666"
+# SUBSYSTEM=="usb", ATTRS{idVendor}=="28e9", ATTRS{idProduct}=="0189", GROUP="plugdev", MODE="0666"
 # *** checkout::::          dfu-util -l	
 
 #	ftdi 232H
-#SUBSYSTEMS=="usb", ATTRS{idVendor}=="0403", ATTRS{idProduct}=="6014", GROUP="plugdev", MODE="0666"
+#SUBSYSTEM=="usb", ATTRS{idVendor}=="0403", ATTRS{idProduct}=="6014", GROUP="plugdev", MODE="0666"
+
+#	RV-debuggerplus ftdi 2232HCD
+#SUBSYSTEM=="usb", ATTRS{idVendor}=="0403", ATTRS{idProduct}=="6010", GROUP="plugdev", MODE="0666"

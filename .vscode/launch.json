@@ -16,7 +16,8 @@
             "searchDir": ["/usr/share/openocd/scripts"],           
             "configFiles": 
             [
-                "./lib/interface_ftdi.cfg",
+                //"./lib/interface_ftdi.cfg",
+                "./lib/interface_RV.cfg",
                 "./lib/gd32vf103.cfg"
             ]
         }
